@@ -69,6 +69,8 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
+            <Rectangle Width="6" Height="24" HorizontalAlignment="Left" VerticalAlignment="Center" Fill="#ddd" />
+
             <Grid Width="48">
                 <Viewbox ToolTipService.ToolTip="{Binding Label}" Margin="16,12" VerticalAlignment="Center">
                     <SymbolIcon Symbol="Find" />
