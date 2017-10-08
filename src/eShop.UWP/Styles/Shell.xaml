@@ -5,7 +5,10 @@
     xmlns:ic="using:Microsoft.Xaml.Interactions.Core"
     xmlns:ts="using:eShop.UWP.TemplateSelectors">
 
-    <ts:NavigationItemTemplateSelector x:Key="NavigationItemTemplateSelector" CommonItem="{StaticResource NavigationMenuItemDataTemplate}" SearchItem="{StaticResource NavigationSearchDataTemplate}" />
+    <ts:NavigationItemTemplateSelector x:Key="NavigationItemTemplateSelector"
+                                       CommonItem="{StaticResource NavigationMenuItemDataTemplate}"
+                                       SearchItem="{StaticResource NavigationSearchDataTemplate}"
+                                       LogoutItem="{StaticResource NavigationLogoutDataTemplate}" />
 
     <DataTemplate x:Key="NavigationMenuItemDataTemplate">
         <Grid Width="320" Height="40">
@@ -67,6 +70,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="8" />
             </Grid.ColumnDefinitions>
 
             <Rectangle Width="6" Height="24" HorizontalAlignment="Left" VerticalAlignment="Center" Fill="#ddd" />
@@ -83,6 +87,24 @@
                     </ic:EventTriggerBehavior>
                 </i:Interaction.Behaviors>
             </AutoSuggestBox>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="NavigationLogoutDataTemplate">
+        <Grid Width="320" Height="40">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="48" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="48" />
+            </Grid.ColumnDefinitions>
+            
+            <Image Width="20" HorizontalAlignment="Center" VerticalAlignment="Center" Source="ms-appx:///Assets/Images/profile.png" Stretch="Uniform" />
+            <TextBlock Grid.Column="1" VerticalAlignment="Center" Style="{StaticResource BodyTextStyle}" Text="{Binding Label}" />
+            <Grid Width="48" Grid.Column="2">
+                <Viewbox ToolTipService.ToolTip="{Binding Label}" Margin="16,12" VerticalAlignment="Center">
+                    <FontIcon Glyph="&#xE7E8;" />
+                </Viewbox>
+            </Grid>
         </Grid>
     </DataTemplate>
 

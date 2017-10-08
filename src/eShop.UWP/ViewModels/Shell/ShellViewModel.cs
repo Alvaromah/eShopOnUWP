@@ -64,9 +64,12 @@ namespace eShop.UWP.ViewModels.Shell
             set
             {
                 Set(ref _selectedItem, value);
-                if (!(value is ShellSearchItem))
+                if (value != null)
                 {
-                    Navigate(value);
+                    if (!(value is ShellSearchItem))
+                    {
+                        Navigate(value);
+                    }
                 }
             }
         }
@@ -105,6 +108,10 @@ namespace eShop.UWP.ViewModels.Shell
             {
                 IsPaneOpen = !_isPaneOpen;
                 SelectedItem = _shellDefaultItem;
+            }
+            else if (args.ClickedItem is ShellLogoutItem)
+            {
+                Logout();
             }
         });
 
@@ -169,6 +176,8 @@ namespace eShop.UWP.ViewModels.Shell
             _primaryItems.Add(_shellDefaultItem);
             _primaryItems.Add(new ShellNavigationItem(Constants.ShellStatisticsKey.GetLocalized(), Application.Current.Resources["StatisticsIcon"] as string, typeof(StatisticsViewModel).FullName));
             _primaryItems.Add(new ShellNavigationItem(Constants.ShellAddItemKey.GetLocalized(), Application.Current.Resources["AddNewItemIcon"] as string, typeof(ItemDetailViewModel).FullName));
+
+            _secondaryItems.Add(new ShellLogoutItem(UserName));
         }
 
         private void OnSearch(string query)

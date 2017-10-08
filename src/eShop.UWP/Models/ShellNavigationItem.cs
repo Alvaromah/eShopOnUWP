@@ -11,6 +11,11 @@ namespace eShop.UWP.Models
         private Visibility _selectedVis = Visibility.Collapsed;
         private SolidColorBrush _selectedForeground = null;
 
+        protected ShellNavigationItem(string name)
+        {
+            Label = name;
+        }
+
         public ShellNavigationItem(string name, string symbol, string viewModelName)
         {
             Label = name;

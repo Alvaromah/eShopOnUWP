@@ -11,6 +11,7 @@ namespace eShop.UWP.TemplateSelectors
     {
         public DataTemplate CommonItem { get; set; }
         public DataTemplate SearchItem { get; set; }
+        public DataTemplate LogoutItem { get; set; }
 
         protected override DataTemplate SelectTemplateCore(object item)
         {
@@ -18,17 +19,9 @@ namespace eShop.UWP.TemplateSelectors
             {
                 return SearchItem;
             }
-            return CommonItem;
-        }
-
-        protected override DataTemplate SelectTemplateCore(object item, DependencyObject container)
-        {
-            if (item is ShellNavigationItem navItem)
+            if (item is ShellLogoutItem)
             {
-                if (navItem.Label == "Search")
-                {
-                    return SearchItem;
-                }
+                return LogoutItem;
             }
             return CommonItem;
         }

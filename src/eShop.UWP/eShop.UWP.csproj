@@ -156,6 +156,7 @@
     <Compile Include="Models\DataPoint.cs" />
     <Compile Include="Models\Order.cs" />
     <Compile Include="Models\Serie.cs" />
+    <Compile Include="Models\ShellLogoutItem.cs" />
     <Compile Include="Models\ShellSearchItem.cs" />
     <Compile Include="Services\Cortana\BackgroundVoiceCommandService.cs" />
     <Compile Include="Services\Cortana\CatalogVoiceCommand.cs" />

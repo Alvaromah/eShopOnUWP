@@ -12,16 +12,19 @@
     mc:Ignorable="d">
 
     <toolkit:HamburgerMenu x:Name="NavigationMenu" DisplayMode="{Binding DisplayMode, Mode=OneWay}" IsPaneOpen="{Binding IsPaneOpen, Mode=TwoWay}"
-                            ItemTemplateSelector="{StaticResource NavigationItemTemplateSelector}" ItemsSource="{Binding PrimaryItems}"
-                            OptionsItemTemplate="{StaticResource NavigationMenuItemDataTemplate}" OptionsItemsSource="{Binding SecondaryItems}"
-                            PaneBackground="#ddd" PaneForeground="{ThemeResource SystemControlForegroundBaseHighBrush}"
-                            SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
+                           ItemTemplateSelector="{StaticResource NavigationItemTemplateSelector}" ItemsSource="{Binding PrimaryItems}"
+                           OptionsItemTemplateSelector="{StaticResource NavigationItemTemplateSelector}" OptionsItemsSource="{Binding SecondaryItems}"
+                           PaneBackground="#ddd" PaneForeground="{ThemeResource SystemControlForegroundBaseHighBrush}"
+                           SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
         <i:Interaction.Behaviors>
             <ic:EventTriggerBehavior EventName="Loaded">
                 <ic:InvokeCommandAction Command="{Binding LoadedCommand}" />
             </ic:EventTriggerBehavior>
             <ic:EventTriggerBehavior EventName="ItemClick">
                 <ic:InvokeCommandAction Command="{Binding ItemClickCommand}" />
+            </ic:EventTriggerBehavior>
+            <ic:EventTriggerBehavior EventName="OptionsItemClick">
+                <ic:InvokeCommandAction Command="{Binding LogoutCommand}" />
             </ic:EventTriggerBehavior>
         </i:Interaction.Behaviors>
 
@@ -54,5 +57,5 @@
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
     </toolkit:HamburgerMenu>
-    
+
 </base:PageBase>
