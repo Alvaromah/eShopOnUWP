@@ -23,11 +23,6 @@
     <SolidColorBrush x:Key="SecondaryLightChartBrush" Color="{StaticResource SecondaryLightChart}" />
     <SolidColorBrush x:Key="TertiaryMediumChartBrush" Color="{StaticResource TertiaryMediumChart}" />
 
-    <AcrylicBrush
-        x:Key="CustomAcrylicBrush"
-        BackgroundSource="HostBackdrop"
-        FallbackColor="White"
-        TintColor="White"
-        TintOpacity="0.7" />
+    <SolidColorBrush x:Key="CustomAcrylicBrush" Color="{StaticResource TertiaryMediumChart}" />
 
 </ResourceDictionary>

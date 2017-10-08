@@ -32,7 +32,8 @@ namespace eShop.UWP.Models
             get => _selectedForeground ?? (_selectedForeground = GetStandardTextColorBrush());
             set => Set(ref _selectedForeground, value);
         }
-        public bool IsSelected
+
+        virtual public bool IsSelected
         {
             get => _isSelected;
             set

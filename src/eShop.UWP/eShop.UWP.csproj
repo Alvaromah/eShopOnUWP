@@ -156,6 +156,7 @@
     <Compile Include="Models\DataPoint.cs" />
     <Compile Include="Models\Order.cs" />
     <Compile Include="Models\Serie.cs" />
+    <Compile Include="Models\ShellSearchItem.cs" />
     <Compile Include="Services\Cortana\BackgroundVoiceCommandService.cs" />
     <Compile Include="Services\Cortana\CatalogVoiceCommand.cs" />
     <Compile Include="Services\Cortana\VoiceCommandService.cs" />
@@ -170,6 +171,7 @@
     <Compile Include="Services\VoiceCommandActivationService.cs" />
     <Compile Include="TemplateSelectors\CatalogFormatTemplateSelector.cs" />
     <Compile Include="TemplateSelectors\LoginMethodTemplateSelector.cs" />
+    <Compile Include="TemplateSelectors\NavigationItemTemplateSelector.cs" />
     <Compile Include="ViewModels\Base\CustomViewModelBase.cs" />
     <Compile Include="ViewModels\Base\ViewModelLocator.cs" />
     <Compile Include="ViewModels\Catalog\ItemsContainViewModel.cs" />
