@@ -5,11 +5,15 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+
 using Windows.ApplicationModel.VoiceCommands;
 using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
+
+using GalaSoft.MvvmLight.Command;
+
 using eShop.Cortana;
 using eShop.Providers.Contracts;
 using eShop.UWP.Helpers;
@@ -17,7 +21,6 @@ using eShop.UWP.Models;
 using eShop.UWP.ViewModels.Base;
 using eShop.UWP.ViewModels.Catalog;
 using eShop.UWP.ViewModels.Login;
-using GalaSoft.MvvmLight.Command;
 
 namespace eShop.UWP.ViewModels.Shell
 {
@@ -26,10 +29,9 @@ namespace eShop.UWP.ViewModels.Shell
         private readonly CatalogViewModel _catalogViewModel;
         private readonly ICatalogProvider _catalogProvider;
 
-        private string _query;
         private ShellNavigationItem _selectedItem;
         private ShellNavigationItem _lastSelectedItem;
-        private bool _isPaneOpen;
+        private bool _isPaneOpen = true;
         private ObservableCollection<ShellNavigationItem> _primaryItems = new ObservableCollection<ShellNavigationItem>();
         private ObservableCollection<ShellNavigationItem> _secondaryItems = new ObservableCollection<ShellNavigationItem>();
 
@@ -44,11 +46,12 @@ namespace eShop.UWP.ViewModels.Shell
 
         public string Query
         {
-            get => _query;
+            get => _shellSearchItem.Query;
             set
             {
-                Set(ref _query, value);
-                if (string.IsNullOrEmpty(_query))
+                _shellSearchItem.Query = value;
+
+                if (string.IsNullOrEmpty(value))
                 {
                     _catalogViewModel.Search(string.Empty);
                 }
@@ -61,14 +64,21 @@ namespace eShop.UWP.ViewModels.Shell
             set
             {
                 Set(ref _selectedItem, value);
-                Navigate(value);
+                if (!(value is ShellSearchItem))
+                {
+                    Navigate(value);
+                }
             }
         }
 
         public bool IsPaneOpen
         {
             get => _isPaneOpen;
-            set => Set(ref _isPaneOpen, value);
+            set
+            {
+                Set(ref _isPaneOpen, value);
+                _shellSearchItem.IconVisibility = value ? Visibility.Collapsed : Visibility.Visible;
+            }
         }
 
         public ObservableCollection<ShellNavigationItem> PrimaryItems
@@ -89,7 +99,14 @@ namespace eShop.UWP.ViewModels.Shell
 
         public ICommand OpenPaneCommand => new RelayCommand(() => IsPaneOpen = !_isPaneOpen);
 
-        public ICommand SearchCommand => new RelayCommand(Search);
+        public ICommand ItemClickCommand => new RelayCommand<ItemClickEventArgs>((args) =>
+        {
+            if (args.ClickedItem is ShellSearchItem)
+            {
+                IsPaneOpen = !_isPaneOpen;
+                SelectedItem = _shellDefaultItem;
+            }
+        });
 
         public void Initialize(Frame frame)
         {
@@ -133,18 +150,31 @@ namespace eShop.UWP.ViewModels.Shell
             }
             else
             {
-                SelectedItem = PrimaryItems.FirstOrDefault();
+                SelectedItem = _shellDefaultItem;
             }
         }
+
+        private ShellSearchItem _shellSearchItem = null;
+        private ShellNavigationItem _shellDefaultItem = null;
 
         private void PopulateNavItems()
         {
             _primaryItems.Clear();
             _secondaryItems.Clear();
-            
-            _primaryItems.Add(new ShellNavigationItem(Constants.ShellCatalogKey.GetLocalized(), Application.Current.Resources["CatalogIcon"] as string, typeof(CatalogViewModel).FullName));
+
+            _shellSearchItem = new ShellSearchItem(OnSearch);
+            _shellDefaultItem = new ShellNavigationItem(Constants.ShellCatalogKey.GetLocalized(), Application.Current.Resources["CatalogIcon"] as string, typeof(CatalogViewModel).FullName);
+
+            _primaryItems.Add(_shellSearchItem);
+            _primaryItems.Add(_shellDefaultItem);
             _primaryItems.Add(new ShellNavigationItem(Constants.ShellStatisticsKey.GetLocalized(), Application.Current.Resources["StatisticsIcon"] as string, typeof(StatisticsViewModel).FullName));
             _primaryItems.Add(new ShellNavigationItem(Constants.ShellAddItemKey.GetLocalized(), Application.Current.Resources["AddNewItemIcon"] as string, typeof(ItemDetailViewModel).FullName));
+        }
+
+        private void OnSearch(string query)
+        {
+            _catalogViewModel.Search(Query ?? String.Empty);
+            SelectedItem = _shellDefaultItem;
         }
 
         private void NavigationServiceOnNavigated(object sender, NavigationEventArgs e)
@@ -184,6 +214,7 @@ namespace eShop.UWP.ViewModels.Shell
         private void Navigate(object item)
         {
             var navigationItem = item as ShellNavigationItem;
+
             if (navigationItem != null)
             {
                 NavigationService.Navigate(navigationItem.ViewModelName);
@@ -200,13 +231,6 @@ namespace eShop.UWP.ViewModels.Shell
             CleanBackStack();
             NavigationService.Frame = Window.Current.Content as Frame;
             NavigationService.Navigate(typeof(LoginViewModel).FullName);
-        }
-
-        private void Search()
-        {
-            var catalogViewModelName = typeof(CatalogViewModel).FullName;
-            SelectedItem = PrimaryItems.FirstOrDefault(item => catalogViewModelName.Equals(item.ViewModelName, StringComparison.CurrentCultureIgnoreCase));
-            _catalogViewModel.Search(Query);
         }
     }
 }
